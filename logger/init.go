@@ -2,6 +2,7 @@ package sl
 
 import (
 	"io"
+	"log"
 	"log/slog"
 	"os"
 
@@ -14,6 +15,10 @@ func ExecLog(path string) *slog.Logger {
 		level  slog.Level
 		writer io.Writer
 	)
+
+	if path == "" {
+		path = getConfig()
+	}
 
 	level = slog.LevelInfo
 	writer = io.MultiWriter(
@@ -39,4 +44,12 @@ func createFileWriter(path string) io.Writer {
 		Compress:   true,
 		LocalTime:  true,
 	}
+}
+
+func getConfig() string {
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return dir
 }
