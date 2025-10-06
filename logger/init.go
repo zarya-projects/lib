@@ -16,10 +16,6 @@ func ExecLog(path string) *slog.Logger {
 		writer io.Writer
 	)
 
-	if path == "" {
-		path = getConfig()
-	}
-
 	level = slog.LevelInfo
 	writer = io.MultiWriter(
 		os.Stdout,

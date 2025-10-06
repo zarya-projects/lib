@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -10,13 +11,11 @@ import (
 
 func GetInstance(path string) {
 
-	if path == "" {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		fmt.Println("Config file not found: ", path, "; Use default config")
 		path = getConfig()
 	}
 
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Fatalf("Config file not found: %s", path)
-	}
 	if err := godotenv.Load(path); err != nil {
 		panic(err)
 	}
