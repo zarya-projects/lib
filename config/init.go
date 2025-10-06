@@ -16,7 +16,7 @@ func GetInstance(path string) {
 		path = getConfig()
 	}
 
-	if err := godotenv.Load(path); err != nil {
+	if err := godotenv.Load(fmt.Sprintf("%s/.env", path)); err != nil {
 		panic(err)
 	}
 }
