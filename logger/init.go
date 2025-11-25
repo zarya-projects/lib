@@ -16,6 +16,11 @@ func ExecLog(path string) *slog.Logger {
 		writer io.Writer
 	)
 
+	// Если путь пустой, используем значение по умолчанию
+	if path == "" {
+		path = "./logs"
+	}
+
 	level = slog.LevelInfo
 	writer = io.MultiWriter(
 		os.Stdout,
@@ -28,12 +33,17 @@ func ExecLog(path string) *slog.Logger {
 }
 
 func createFileWriter(path string) io.Writer {
+	// Создаем директорию для логов, если её нет
 	if err := os.MkdirAll(path, 0755); err != nil {
+		log.Printf("Failed to create log directory: %v\n", err)
 		panic(err)
 	}
 
+	logFile := path + "/info.log"
+	log.Printf("Logger initialized. Log file: %s\n", logFile)
+
 	return &lumberjack.Logger{
-		Filename:   path + "/info.log",
+		Filename:   logFile,
 		MaxSize:    25,
 		MaxBackups: 7,
 		MaxAge:     30,
