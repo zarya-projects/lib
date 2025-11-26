@@ -25,7 +25,7 @@ type SRedis struct {
 
 type Base interface {
 	Connect() error
-	Close()
+	Close() error
 	HealthCheck() error
 }
 
