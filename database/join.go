@@ -15,6 +15,12 @@ type SDatabase struct {
 	opts   Options
 }
 
+type Base interface {
+	Connect() error
+	Close()
+	HealthCheck() error
+}
+
 func (d *SDatabase) Connect() error {
 	var (
 		err error
