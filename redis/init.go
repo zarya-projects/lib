@@ -24,7 +24,8 @@ type SRedis struct {
 type Base interface {
 	Connect() error
 	Close() error
-	HealthCheck() error
+	HealthCheck(ctx context.Context) error
+	GetClient() *redis.Client
 }
 
 func New(opts Options) *SRedis {
