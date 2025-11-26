@@ -3,7 +3,6 @@ package redis
 import (
 	"context"
 	"errors"
-	"log/slog"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -19,7 +18,6 @@ type Options struct {
 
 type SRedis struct {
 	client *redis.Client
-	logger *slog.Logger
 	opts   Options
 }
 
@@ -29,8 +27,8 @@ type Base interface {
 	HealthCheck() error
 }
 
-func New(opts Options, logger *slog.Logger) *SRedis {
-	return &SRedis{opts: opts, logger: logger}
+func New(opts Options) *SRedis {
+	return &SRedis{opts: opts}
 }
 
 func (r *SRedis) Connect() error {
@@ -74,6 +72,10 @@ func (r *SRedis) Close() error {
 	return r.client.Close()
 }
 
-func (r *SRedis) HealthCheck() error {
-	return r.client.Ping(context.Background()).Err()
+func (r *SRedis) HealthCheck(ctx context.Context) error {
+	return r.client.Ping(ctx).Err()
+}
+
+func (r *SRedis) GetClient() *redis.Client {
+	return r.client
 }
